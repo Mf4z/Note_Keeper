@@ -1,14 +1,13 @@
 package com.example.notekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 public class NoteActivity extends AppCompatActivity {
 
     public static final String NOTE_INFO = "com.example.notekeeper.NOTE_INFO";
+    private NoteInfo mNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,31 @@ public class NoteActivity extends AppCompatActivity {
 
         //Setting adapter to spinner
         spinnerCourses.setAdapter(adapterCourses);
+
+        //Method to display values gotten from intent
+
+        readDisplayValues();
+
+        EditText textNoteTitle = (EditText) findViewById(R.id.editText_note_title);
+        EditText textNoteText = (EditText) findViewById(R.id.editText_note_text);
+
+        displayNotes(spinnerCourses, textNoteTitle, textNoteText);
+    }
+
+    private void displayNotes(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
+
+        List<CourseInfo> courses = DataManager.getInstance().getCourses();
+        int courseIndex = courses.indexOf(mNote.getCourse());
+        spinnerCourses.setSelection(courseIndex);
+
+        textNoteTitle.setText(mNote.getTitle());
+        textNoteText.setText(mNote.getText());
+
+    }
+
+    private void readDisplayValues() {
+        Intent intent = getIntent();
+        mNote = intent.getParcelableExtra(NOTE_INFO);
     }
 
     @Override

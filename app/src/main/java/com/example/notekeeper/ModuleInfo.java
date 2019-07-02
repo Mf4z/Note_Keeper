@@ -22,6 +22,24 @@ public final class ModuleInfo implements Parcelable {
         mIsComplete = isComplete;
     }
 
+    protected ModuleInfo(Parcel in) {
+        mModuleId = in.readString();
+        mTitle = in.readString();
+        mIsComplete = in.readByte() != 0;
+    }
+
+    public static final Creator<ModuleInfo> CREATOR = new Creator<ModuleInfo>() {
+        @Override
+        public ModuleInfo createFromParcel(Parcel in) {
+            return new ModuleInfo(in);
+        }
+
+        @Override
+        public ModuleInfo[] newArray(int size) {
+            return new ModuleInfo[size];
+        }
+    };
+
     public String getModuleId() {
         return mModuleId;
     }
@@ -65,6 +83,8 @@ public final class ModuleInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(mModuleId);
+        dest.writeString(mTitle);
+        dest.writeByte((byte) (mIsComplete ? 1 : 0));
     }
 }
