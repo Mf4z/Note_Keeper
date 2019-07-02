@@ -1,5 +1,6 @@
 package com.example.notekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,7 +49,8 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(getBaseContext(),"Clicked list item",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(NoteListActivity.this,NoteActivity.class);
+                startActivity(intent);
             }
         });
 
