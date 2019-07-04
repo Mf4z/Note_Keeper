@@ -22,6 +22,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText mTextNoteTitle;
     private EditText mTextNoteText;
     private int mNotePosition;
+    private boolean mIsCanceling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,13 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if(mIsCanceling){
+            if(mIsNewNote)
+            DataManager.getInstance().removeNote(mNotePosition);
+        }
+        else {
         saveNote();
+        }
     }
 
     private void saveNote() {
@@ -113,6 +120,11 @@ public class NoteActivity extends AppCompatActivity {
 
             sendEmail();
             return true;
+        }
+
+        else if (id == R.id.action_cancel) {
+            mIsCanceling = true;
+            finish(); //It means end activity. This is a
         }
 
         return super.onOptionsItemSelected(item);
