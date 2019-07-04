@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Note Keeper</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_send_email">Send as Email</string>
     <string name="title_activity_note">Edit Note</string>
 </resources>
