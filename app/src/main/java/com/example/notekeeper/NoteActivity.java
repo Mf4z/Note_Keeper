@@ -21,6 +21,7 @@ public class NoteActivity extends AppCompatActivity {
     private Spinner mSpinnerCourses;
     private EditText mTextNoteTitle;
     private EditText mTextNoteText;
+    private int mNotePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,30 @@ public class NoteActivity extends AppCompatActivity {
         mTextNoteTitle = (EditText) findViewById(R.id.editText_note_title);
         mTextNoteText = (EditText) findViewById(R.id.editText_note_text);
 
-        if(!mIsNewNote)
+        if(mIsNewNote){
+            createNewNote();
+        }
+        else {
         displayNotes(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
+        }
+    }
+
+    private void createNewNote() {
+        DataManager dm = DataManager.getInstance();
+        mNotePosition = dm.createNewNote();
+        mNote = dm.getNotes().get(mNotePosition);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveNote();
+    }
+
+    private void saveNote() {
+        mNote.setCourse((CourseInfo) mSpinnerCourses.getSelectedItem());
+        mNote.setTitle(mTextNoteTitle.getText().toString());
+        mNote.setText(mTextNoteText.getText().toString());
     }
 
     private void displayNotes(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
@@ -109,4 +132,6 @@ public class NoteActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+
 }
