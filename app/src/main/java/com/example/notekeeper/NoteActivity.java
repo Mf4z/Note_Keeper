@@ -23,6 +23,9 @@ public class NoteActivity extends AppCompatActivity {
     private EditText mTextNoteText;
     private int mNotePosition;
     private boolean mIsCanceling;
+    private String mOriginalNoteCourseID;
+    private String mOriginalNoteTitle;
+    private String mOriginalNoteText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,11 @@ public class NoteActivity extends AppCompatActivity {
         mSpinnerCourses.setAdapter(adapterCourses);
 
         //Method to display values gotten from intent
-
         readDisplayValues();
+
+        //Method retrive the original values
+        saveOriginalNoteValues();
+
 
         mTextNoteTitle = (EditText) findViewById(R.id.editText_note_title);
         mTextNoteText = (EditText) findViewById(R.id.editText_note_text);
@@ -57,6 +63,15 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+    private void saveOriginalNoteValues() {
+        if(mIsNewNote)
+            return;
+
+        mOriginalNoteCourseID = mNote.getCourse().getCourseId();
+        mOriginalNoteTitle = mNote.getTitle();
+        mOriginalNoteText = mNote.getText();
+    }
+
     private void createNewNote() {
         DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
@@ -67,12 +82,23 @@ public class NoteActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if(mIsCanceling){
-            if(mIsNewNote)
+            if(mIsNewNote){
             DataManager.getInstance().removeNote(mNotePosition);
+            }
+            else {
+                storePreviousNoteValues();
+            }
         }
         else {
         saveNote();
         }
+    }
+
+    private void storePreviousNoteValues() {
+        CourseInfo course = DataManager.getInstance().getCourse(mOriginalNoteCourseID);
+        mNote.setCourse(course);
+        mNote.setTitle(mOriginalNoteTitle);
+        mNote.setText(mOriginalNoteText);
     }
 
     private void saveNote() {
