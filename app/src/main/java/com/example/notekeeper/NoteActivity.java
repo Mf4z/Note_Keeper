@@ -2,6 +2,7 @@ package com.example.notekeeper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +16,9 @@ import java.util.List;
 public class NoteActivity extends AppCompatActivity {
 
     public static final String NOTE_POSITION = "com.example.notekeeper.NOTE_POSITION";
+    public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.notekeeper.ORIGINAL_NOTE_COURSE_ID";
+    public static final String ORIGINAL_NOTE_TITLE = "com.example.notekeeper.ORIGINAL_NOTE_TITLE";
+    public static final String ORIGINAL_NOTE_TEXT = "com.example.notekeeper.ORIGINAL_NOTE_TEXT";
     public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
     private boolean mIsNewNote;
@@ -48,8 +52,13 @@ public class NoteActivity extends AppCompatActivity {
         //Method to display values gotten from intent
         readDisplayValues();
 
+        if(savedInstanceState == null){
         //Method retrive the original values
         saveOriginalNoteValues();
+        }
+        else {
+            restoreOriginalNoteValues(savedInstanceState);
+        }
 
 
         mTextNoteTitle = (EditText) findViewById(R.id.editText_note_title);
@@ -61,6 +70,12 @@ public class NoteActivity extends AppCompatActivity {
         else {
         displayNotes(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
         }
+    }
+
+    private void restoreOriginalNoteValues(Bundle savedInstanceState) {
+        mOriginalNoteCourseID = savedInstanceState.getString(ORIGINAL_NOTE_COURSE_ID);
+        mOriginalNoteTitle = savedInstanceState.getString(ORIGINAL_NOTE_TITLE);
+        mOriginalNoteText = savedInstanceState.getString(ORIGINAL_NOTE_TEXT);
     }
 
     private void saveOriginalNoteValues() {
@@ -92,6 +107,16 @@ public class NoteActivity extends AppCompatActivity {
         else {
         saveNote();
         }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(ORIGINAL_NOTE_COURSE_ID,mOriginalNoteCourseID);
+        outState.putString(ORIGINAL_NOTE_TITLE,mOriginalNoteTitle);
+        outState.putString(ORIGINAL_NOTE_TEXT,mOriginalNoteText);
     }
 
     private void storePreviousNoteValues() {
