@@ -177,8 +177,21 @@ public class NoteActivity extends AppCompatActivity {
             mIsCanceling = true;
             finish(); //It means end activity. This is a
         }
+        else if (id == R.id.action_next) {
+            moveNext();
 
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void moveNext() {
+        saveNote();
+
+        ++mNotePosition;
+        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+
+        saveOriginalNoteValues();
+        displayNotes(mSpinnerCourses,mTextNoteTitle,mTextNoteText);
     }
 
     private void sendEmail() {
