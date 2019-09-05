@@ -5,14 +5,18 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,8 +67,14 @@ public class NextThroughNotesTest   {
             onView(withId(R.id.editText_note_title)).check(matches(withText(note.getTitle())));
             onView(withId(R.id.editText_note_text)).check(matches(withText(note.getText())));
 
-            onView(withId(R.id.action_next)).perform(click());
+
+            if (index<notes.size() -1)
+
+                onView(allOf(withId(R.id.action_next), isEnabled())).perform(click());
         }
+
+        onView(withId(R.id.action_next)).check(matches(not(isEnabled())));
+        pressBack();
 
     }
 
