@@ -54,13 +54,18 @@ public class NextThroughNotesTest   {
         onView(withId(R.id.list_items)).perform(actionOnItemAtPosition(0,click()));
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
-        int index = 0;
-        NoteInfo note = notes.get(index);
+        for (int index = 0; index < notes.size(); index++){
 
-        onView(withId(R.id.spinner_courses)).check(
-                matches(withSpinnerText(note.getCourse().getTitle())));
-        onView(withId(R.id.editText_note_title)).check(matches(withText(note.getTitle())));
-        onView(withId(R.id.editText_note_text)).check(matches(withText(note.getText())));
+            NoteInfo note = notes.get(index);
+
+            onView(withId(R.id.spinner_courses)).check(
+                    matches(withSpinnerText(note.getCourse().getTitle())));
+            onView(withId(R.id.editText_note_title)).check(matches(withText(note.getTitle())));
+            onView(withId(R.id.editText_note_text)).check(matches(withText(note.getText())));
+
+            onView(withId(R.id.action_next)).perform(click());
+        }
+
     }
 
 }
