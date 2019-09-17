@@ -16,4 +16,8 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="note_title_hint">Note title</string>
+    <string name="note_text_hint">Note text</string>
+    <string name="nav_share_message">Share</string>
+    <string name="nav_send_message">Send</string>
 </resources>

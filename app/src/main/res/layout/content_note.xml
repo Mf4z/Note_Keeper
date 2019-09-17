@@ -26,11 +26,12 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Note title"
+        android:hint="@string/note_title_hint"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="@+id/spinner_courses"
         app:layout_constraintStart_toStartOf="@+id/spinner_courses"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_courses" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_courses"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/editText_note_text"
@@ -39,10 +40,11 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Note text"
+        android:hint="@string/note_text_hint"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="@+id/editText_note_title"
         app:layout_constraintStart_toStartOf="@+id/editText_note_title"
-        app:layout_constraintTop_toBottomOf="@+id/editText_note_title" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_note_title"
+        android:autofillHints="" />
 
 </android.support.constraint.ConstraintLayout>
