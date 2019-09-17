@@ -10,7 +10,7 @@
             android:title="Notes" />
         <item
             android:id="@+id/nav_courses"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="Courses" />
     </group>
 

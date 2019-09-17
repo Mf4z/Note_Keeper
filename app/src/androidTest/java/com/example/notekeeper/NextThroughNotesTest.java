@@ -68,8 +68,7 @@ public class NextThroughNotesTest   {
             onView(withId(R.id.editText_note_text)).check(matches(withText(note.getText())));
 
 
-            if (index<notes.size() -1)
-
+            if (index < notes.size()-1)
                 onView(allOf(withId(R.id.action_next), isEnabled())).perform(click());
         }
 
