@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+<!--        <item name="editTextStyle">@style/WeirdEditText</item>-->
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,6 +19,11 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="WeirdEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@android:color/holo_green_dark</item>
+        <item name="android:textColorHint">@android:color/holo_red_dark</item>
+    </style>
 
     <style name="CourseTitle" parent="@style/TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/pluralsight_orange</item>
