@@ -35,11 +35,10 @@
         app:useSimpleSummaryProvider="true"/>
 
     <ListPreference
-        android:key="user_favorite_social"
         app:defaultValue="@array/pref_default_favorite_social"
         app:entries="@array/pref_entries_favorite_social"
         app:entryValues="@array/pref_value_favorite_social"
-        app:key="reply"
+        app:key="user_favorite_social`"
         app:title="@string/pref_title_favoite_social"
         app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

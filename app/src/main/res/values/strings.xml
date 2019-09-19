@@ -30,6 +30,7 @@
     <string name="pref_title_display_name">Your Name</string>
     <string name="pref_default_display_name">Marwan Mai</string>
     <string name="pref_default_email_address">yourname@yourhost.com</string>
+    <string name="pref_default_fav_share">plus.google.com</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
