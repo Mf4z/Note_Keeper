@@ -22,6 +22,7 @@ public class NoteKeeperOpenHelper extends SQLiteOpenHelper {
         DatabaseDataWorker worker = new DatabaseDataWorker(db);
         worker.insertCourses();
         worker.insertSampleNotes();
+
     }
 
     @Override

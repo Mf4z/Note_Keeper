@@ -1,5 +1,9 @@
 package com.example.notekeeper;
 
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.notekeeper.NoteKeeperDatabaseContract.CourseInfoEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +20,19 @@ public class DataManager {
     public static DataManager getInstance() {
         if(ourInstance == null) {
             ourInstance = new DataManager();
-            ourInstance.initializeCourses();
-            ourInstance.initializeExampleNotes();
+          /*  ourInstance.initializeCourses();
+            ourInstance.initializeExampleNotes();*/
         }
         return ourInstance;
+    }
+
+    public static void loadFromDatabase(NoteKeeperOpenHelper dbHelper){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] courseColumns = {
+                CourseInfoEntry.COLUMN_COURSE_ID,
+                CourseInfoEntry.COLUMN_COURSE_TITLE};
+
+        db.query(CourseInfoEntry.TABLE_NAME, courseColumns,null,null,null,null,null);
     }
 
     public String getCurrentUserName() {
