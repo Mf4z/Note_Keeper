@@ -36,12 +36,34 @@ public class DataManager {
 
         final Cursor courseCursor = db.query(CourseInfoEntry.TABLE_NAME, courseColumns, null, null, null, null, null);
 
+        loadCoursesFromDatabase(courseCursor);
+
         String[] noteColumns = {
                 NoteInfoEntry.COLUMN_NOTE_TITLE,
                 NoteInfoEntry.COLUMN_NOTE_TEXT,
                 NoteInfoEntry.COLUMN_NOTE_TITLE};
 
         final Cursor noteCursor = db.query(NoteInfoEntry.TABLE_NAME, noteColumns, null, null, null, null, null);
+    }
+
+    private static void loadCoursesFromDatabase(Cursor cursor) {
+
+        int courseIdPos = cursor.getColumnIndex(CourseInfoEntry.COLUMN_COURSE_ID);
+        int courseTitlePos = cursor.getColumnIndex(CourseInfoEntry.COLUMN_COURSE_TITLE);
+
+        DataManager dm = DataManager.getInstance();
+        dm.mCourses.clear();
+        while (cursor.moveToNext()){
+            String courseId = cursor.getString(courseIdPos);
+            String courseTitle = cursor.getString(courseTitlePos);
+            CourseInfo course = new CourseInfo(courseId,courseTitle,null);
+
+            dm.mCourses.add(course);
+        }
+
+        cursor.close();
+
+
     }
 
 
