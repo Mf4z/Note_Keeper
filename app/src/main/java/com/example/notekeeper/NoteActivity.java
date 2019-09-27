@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -19,12 +21,13 @@ import static com.example.notekeeper.NoteKeeperDatabaseContract.*;
 
 public class NoteActivity extends AppCompatActivity {
 
-    public static final String NOTE_POSITION = "com.example.notekeeper.NOTE_POSITION";
+    private final String TAG = getClass().getSimpleName();
+    public static final String NOTE_ID = "com.example.notekeeper.NOTE_ID";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.notekeeper.ORIGINAL_NOTE_COURSE_ID";
     public static final String ORIGINAL_NOTE_TITLE = "com.example.notekeeper.ORIGINAL_NOTE_TITLE";
     public static final String ORIGINAL_NOTE_TEXT = "com.example.notekeeper.ORIGINAL_NOTE_TEXT";
-    public static final int POSITION_NOT_SET = -1;
-    private NoteInfo mNote;
+    public static final int ID_NOT_SET = -1;
+    private NoteInfo mNote = new NoteInfo(DataManager.getInstance().getCourses().get(0), "", "");
     private boolean mIsNewNote;
     private Spinner mSpinnerCourses;
     private EditText mTextNoteTitle;
@@ -39,6 +42,7 @@ public class NoteActivity extends AppCompatActivity {
     private int mCourseIdPos;
     private int mNoteTitlePos;
     private int mNoteTextPos;
+    private int mNoteId;
 
     @Override
     protected void onDestroy() {
@@ -66,7 +70,7 @@ public class NoteActivity extends AppCompatActivity {
         mSpinnerCourses.setAdapter(adapterCourses);
 
         //Method to display values gotten from intent
-        readDisplayValues();
+        readDisplayStateValues();
 
         if(savedInstanceState == null){
         //Method retrive the original values
@@ -80,12 +84,16 @@ public class NoteActivity extends AppCompatActivity {
         mTextNoteTitle = (EditText) findViewById(R.id.editText_note_title);
         mTextNoteText = (EditText) findViewById(R.id.editText_note_text);
 
-        if(mIsNewNote){
+       /* if(mIsNewNote){
             createNewNote();
         }
         else {
             loadNoteData();
-        }
+        }*/
+
+        if(!mIsNewNote)
+            loadNoteData();
+        Log.d(TAG, "onCreate");
     }
 
     private void loadNoteData() { //Querying info for a particular note
@@ -94,9 +102,8 @@ public class NoteActivity extends AppCompatActivity {
         String courseId = "android_intents";
         String titleStart = "dynamic";
 
-        String selection = NoteInfoEntry.COLUMN_COURSE_ID + " = ? AND "
-                + NoteInfoEntry.COLUMN_NOTE_TITLE + " LIKE ?";
-        String[] selectionArgs = {courseId,titleStart + "%"};
+        String selection = NoteInfoEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(mNoteId)};
 
         String[] noteColumns = {
           NoteInfoEntry.COLUMN_COURSE_ID,
@@ -190,13 +197,17 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
-    private void readDisplayValues() {
+    private void readDisplayStateValues() {
         Intent intent = getIntent();
-        int position = intent.getIntExtra(NOTE_POSITION,POSITION_NOT_SET);
+        mNoteId = intent.getIntExtra(NOTE_ID, ID_NOT_SET);
 
-        mIsNewNote = position == POSITION_NOT_SET;
-        if(!mIsNewNote)
-            mNote = DataManager.getInstance().getNotes().get(position);
+        mIsNewNote = mNoteId == ID_NOT_SET;
+
+        if(mIsNewNote){
+            createNewNote();
+        }
+        /*if(!mIsNewNote)
+            mNote = DataManager.getInstance().getNotes().get(mNoteId);*/
     }
 
     @Override
