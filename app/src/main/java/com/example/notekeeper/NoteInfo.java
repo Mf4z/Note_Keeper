@@ -8,9 +8,18 @@ import android.os.Parcelable;
  */
 
 public final class NoteInfo implements Parcelable {
+
+    private int mId;
     private CourseInfo mCourse;
     private String mTitle;
     private String mText;
+
+    public NoteInfo(int mId, CourseInfo mCourse, String mTitle, String mText) {
+        this.mId = mId;
+        this.mCourse = mCourse;
+        this.mTitle = mTitle;
+        this.mText = mText;
+    }
 
     public NoteInfo(CourseInfo course, String title, String text) {
         mCourse = course;
@@ -47,6 +56,14 @@ public final class NoteInfo implements Parcelable {
 
     public void setText(String text) {
         mText = text;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int mId) {
+        this.mId = mId;
     }
 
     private String getCompareKey() {
