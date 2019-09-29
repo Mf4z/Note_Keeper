@@ -40,9 +40,9 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
             return;
 
         //Get column indexes from mCursor
-        mCoursePos = mCursor.getColumnIndex(CourseInfoEntry.COLUMN_COURSE_ID);
-        mNoteTitlePos = mCursor.getColumnIndex(CourseInfoEntry.COLUMN_COURSE_TITLE);
-        mPosId = mCursor.getColumnIndex(CourseInfoEntry._ID);
+        mCoursePos = mCursor.getColumnIndex(NoteInfoEntry.COLUMN_COURSE_ID);
+        mNoteTitlePos = mCursor.getColumnIndex(NoteInfoEntry.COLUMN_NOTE_TITLE);
+        mPosId = mCursor.getColumnIndex(NoteInfoEntry._ID);
 
     }
 
