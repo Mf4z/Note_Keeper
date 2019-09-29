@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class NoteActivity extends AppCompatActivity {
     private int mNoteTitlePos;
     private int mNoteTextPos;
     private int mNoteId;
+    private SimpleCursorAdapter mAdapterCourses;
 
     @Override
     protected void onDestroy() {
@@ -60,14 +62,15 @@ public class NoteActivity extends AppCompatActivity {
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
         mSpinnerCourses = (Spinner) findViewById(R.id.spinner_courses);
 
-        List<CourseInfo> courses = DataManager.getInstance().getCourses();
-        ArrayAdapter<CourseInfo> adapterCourses =
-                new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, courses);
 
-        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAdapterCourses = new SimpleCursorAdapter(this,android.R.layout.simple_list_item_1, null,
+                new String[] {CourseInfoEntry.COLUMN_COURSE_TITLE},
+                new int[] {android.R.id.text1}, 0);
+
+        mAdapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //Setting adapter to spinner
-        mSpinnerCourses.setAdapter(adapterCourses);
+        mSpinnerCourses.setAdapter(mAdapterCourses);
 
         //Method to display values gotten from intent
         readDisplayStateValues();
