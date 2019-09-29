@@ -72,6 +72,9 @@ public class NoteActivity extends AppCompatActivity {
         //Setting adapter to spinner
         mSpinnerCourses.setAdapter(mAdapterCourses);
 
+        //Load Courses from db
+        loadCourseData();
+
         //Method to display values gotten from intent
         readDisplayStateValues();
 
@@ -97,6 +100,20 @@ public class NoteActivity extends AppCompatActivity {
         if(!mIsNewNote)
             loadNoteData();
         Log.d(TAG, "onCreate");
+    }
+
+    private void loadCourseData() {
+        SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
+        String[] courseColumns = {
+                CourseInfoEntry.COLUMN_COURSE_TITLE,
+                CourseInfoEntry.COLUMN_COURSE_ID,
+                CourseInfoEntry._ID};
+
+        Cursor cursor = db.query(CourseInfoEntry.TABLE_NAME,courseColumns,
+                null,null,null,
+                null,CourseInfoEntry.COLUMN_COURSE_TITLE);
+
+        mAdapterCourses.changeCursor(cursor);
     }
 
     private void loadNoteData() { //Querying info for a particular note
