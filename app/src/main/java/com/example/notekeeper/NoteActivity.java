@@ -1,12 +1,15 @@
 package com.example.notekeeper;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.loader.content.CursorLoader;
 
 import android.util.Log;
 import android.view.Menu;
@@ -20,8 +23,9 @@ import java.util.List;
 
 import static com.example.notekeeper.NoteKeeperDatabaseContract.*;
 
-public class NoteActivity extends AppCompatActivity {
+public class NoteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int LOADER_NOTES = 0;
     private final String TAG = getClass().getSimpleName();
     public static final String NOTE_ID = "com.example.notekeeper.NOTE_ID";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.notekeeper.ORIGINAL_NOTE_COURSE_ID";
@@ -98,8 +102,9 @@ public class NoteActivity extends AppCompatActivity {
         }*/
 
         if(!mIsNewNote)
-            loadNoteData();
-        Log.d(TAG, "onCreate");
+            getLoaderManager().initLoader(LOADER_NOTES,null,this);
+
+
     }
 
     private void loadCourseData() {
@@ -312,4 +317,47 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader loader = null;
+        if (id == LOADER_NOTES)
+            loader = createLoaderNotes();
+        return loader;
+    }
+
+    private CursorLoader createLoaderNotes() {
+        return new CursorLoader(this){
+            @Override
+            public Cursor loadInBackground() {
+
+                SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
+
+                String courseId = "android_intents";
+                String titleStart = "dynamic";
+
+                String selection = NoteInfoEntry._ID + " = ?";
+                String[] selectionArgs = {Integer.toString(mNoteId)};
+
+                String[] noteColumns = {
+                        NoteInfoEntry.COLUMN_COURSE_ID,
+                        NoteInfoEntry.COLUMN_NOTE_TITLE,
+                        NoteInfoEntry.COLUMN_NOTE_TEXT
+                };
+
+                return db.query(NoteInfoEntry.TABLE_NAME,noteColumns,selection,selectionArgs,
+                        null,null,null);
+
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
