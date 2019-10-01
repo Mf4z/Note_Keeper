@@ -1,6 +1,7 @@
 package com.example.notekeeper;
 
 import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -9,7 +10,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.loader.content.CursorLoader;
+
 
 import android.util.Log;
 import android.view.Menu;
@@ -354,10 +355,28 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        if(loader.getId() == LOADER_NOTES)
+            loadFinishedNotes(data);
+    }
+
+    private void loadFinishedNotes(Cursor data) {
+        mNoteCursor = data;
+
+        mCourseIdPos = mNoteCursor.getColumnIndex(NoteInfoEntry.COLUMN_COURSE_ID);
+        mNoteTitlePos = mNoteCursor.getColumnIndex(NoteInfoEntry.COLUMN_NOTE_TITLE);
+        mNoteTextPos = mNoteCursor.getColumnIndex(NoteInfoEntry.COLUMN_NOTE_TEXT);
+        mNoteCursor.moveToNext();
+
+        displayNote();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        if (loader.getId() == LOADER_NOTES){
+            if(mNoteCursor != null)
+                mNoteCursor.close();
+        }
+
 
     }
 }
