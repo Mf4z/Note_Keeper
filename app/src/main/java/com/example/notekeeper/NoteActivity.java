@@ -1,6 +1,7 @@
 package com.example.notekeeper;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -206,6 +207,20 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         mNote.setCourse((CourseInfo) mSpinnerCourses.getSelectedItem());
         mNote.setTitle(mTextNoteTitle.getText().toString());
         mNote.setText(mTextNoteText.getText().toString());
+    }
+
+    private void saveNoteToDatabase (String courseId,String noteTitle,String noteText){
+
+        String selection = NoteInfoEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(mNoteId)};
+
+        ContentValues values = new ContentValues();
+        values.put(NoteInfoEntry.COLUMN_COURSE_ID,courseId);
+        values.put(NoteInfoEntry.COLUMN_NOTE_TITLE,noteTitle);
+        values.put(NoteInfoEntry.COLUMN_NOTE_TEXT,noteText);
+
+        SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+        db.update(NoteInfoEntry.TABLE_NAME,values,selection,selectionArgs);
     }
 
     private void displayNote() {
