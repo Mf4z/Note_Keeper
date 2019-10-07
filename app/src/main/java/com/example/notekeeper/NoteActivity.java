@@ -159,13 +159,22 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void createNewNote() {
-        ContentValues values = new ContentValues();
+        final ContentValues values = new ContentValues();
         values.put(NoteInfoEntry.COLUMN_COURSE_ID,"");
         values.put(NoteInfoEntry.COLUMN_NOTE_TITLE,"");
         values.put(NoteInfoEntry.COLUMN_NOTE_TEXT,"");
-        SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
-        mNoteId = (int) db.insert(NoteInfoEntry.TABLE_NAME,null,values);
 
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+
+                SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+                mNoteId = (int) db.insert(NoteInfoEntry.TABLE_NAME,null,values);
+                return null;
+            }
+        };
+
+        task.execute();
     }
 
     @Override
