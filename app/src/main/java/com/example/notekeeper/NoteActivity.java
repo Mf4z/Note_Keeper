@@ -96,13 +96,6 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         mTextNoteTitle = (EditText) findViewById(R.id.editText_note_title);
         mTextNoteText = (EditText) findViewById(R.id.editText_note_text);
 
-       /* if(mIsNewNote){
-            createNewNote();
-        }
-        else {
-            loadNoteData();
-        }*/
-
         if(!mIsNewNote)
             getLoaderManager().initLoader(LOADER_NOTES,null,this);
 
@@ -179,7 +172,7 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onPause();
         if(mIsCanceling){
             if(mIsNewNote){
-            DataManager.getInstance().removeNote(mNotePosition);
+                deleteNoteFromDatabase();
             }
             else {
                 storePreviousNoteValues();
@@ -188,6 +181,13 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         else {
         saveNote();
         }
+    }
+
+    private void deleteNoteFromDatabase() {
+        String selection = NoteInfoEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(mNoteId)};
+        SQLiteDatabase  db = mDbOpenHelper.getWritableDatabase();
+        db.delete(NoteInfoEntry.TABLE_NAME,selection,selectionArgs);
     }
 
 
