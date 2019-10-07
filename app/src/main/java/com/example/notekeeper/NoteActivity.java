@@ -234,18 +234,26 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         return courseId;
     }
 
-    private void saveNoteToDatabase (String courseId,String noteTitle,String noteText){
+    private void saveNoteToDatabase (final String courseId,final String noteTitle,final String noteText){
 
-        String selection = NoteInfoEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(mNoteId)};
+        final String selection = NoteInfoEntry._ID + " = ?";
+        final String[] selectionArgs = {Integer.toString(mNoteId)};
 
-        ContentValues values = new ContentValues();
-        values.put(NoteInfoEntry.COLUMN_COURSE_ID,courseId);
-        values.put(NoteInfoEntry.COLUMN_NOTE_TITLE,noteTitle);
-        values.put(NoteInfoEntry.COLUMN_NOTE_TEXT,noteText);
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                ContentValues values = new ContentValues();
+                values.put(NoteInfoEntry.COLUMN_COURSE_ID,courseId);
+                values.put(NoteInfoEntry.COLUMN_NOTE_TITLE,noteTitle);
+                values.put(NoteInfoEntry.COLUMN_NOTE_TEXT,noteText);
 
-        SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
-        db.update(NoteInfoEntry.TABLE_NAME,values,selection,selectionArgs);
+                SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+                db.update(NoteInfoEntry.TABLE_NAME,values,selection,selectionArgs);
+
+                return null;
+            }
+        };
+        task.execute();
     }
 
     private void displayNote() {
