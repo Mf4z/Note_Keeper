@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -65,6 +66,8 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        enableStrictMode();
+
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
         mSpinnerCourses = (Spinner) findViewById(R.id.spinner_courses);
 
@@ -101,6 +104,17 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
             getLoaderManager().initLoader(LOADER_NOTES,null,this);
 
 
+    }
+
+    private void enableStrictMode() {
+        if (BuildConfig.DEBUG){
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build();
+
+            StrictMode.setThreadPolicy(policy);
+        }
     }
 
     private void loadCourseData() {
