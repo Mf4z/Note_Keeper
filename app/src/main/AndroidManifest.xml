@@ -17,6 +17,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.notekeeper.MainActivity" />
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -47,6 +48,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <provider
+            android:name=".NoteKeeperProvider"
+            android:authorities="com.example.notekeeper.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
