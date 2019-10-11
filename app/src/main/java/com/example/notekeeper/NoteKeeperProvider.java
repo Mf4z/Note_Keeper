@@ -22,9 +22,12 @@ public class NoteKeeperProvider extends ContentProvider {
 
     public static final int NOTES = 1;
 
+    public static final int NOTES_EXPANDED = 2;
+
     static {
         sUriMatcher.addURI(AUTHORITY, Courses.PATH, COURSES);
         sUriMatcher.addURI(AUTHORITY, Notes.PATH, NOTES);
+        sUriMatcher.addURI(AUTHORITY, Notes.PATH_EXPANDED, NOTES_EXPANDED);
     }
 
     public NoteKeeperProvider() {
@@ -84,10 +87,26 @@ public class NoteKeeperProvider extends ContentProvider {
 
             }
 
+            case NOTES_EXPANDED :{
+                cursor = notesExpandedQuery(db,projection,selection,selectionArgs,sortOrder);
+                break;
+            }
+
         }
 
         return cursor;
     }
+
+    private Cursor notesExpandedQuery(SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        String tablesWithJoin = NoteInfoEntry.TABLE_NAME +  " JOIN " +
+                CourseInfoEntry.TABLE_NAME + " ON " +
+                NoteInfoEntry.getQname(NoteInfoEntry.COLUMN_COURSE_ID) + " = " +
+                CourseInfoEntry.getQname(CourseInfoEntry.COLUMN_COURSE_ID);
+
+        return db.query(tablesWithJoin,projection,selection,selectionArgs,null ,
+                null,sortOrder);
+    }
+
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
