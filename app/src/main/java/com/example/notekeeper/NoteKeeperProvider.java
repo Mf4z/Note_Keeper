@@ -6,6 +6,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.example.notekeeper.NoteKeeperDatabaseContract.CourseInfoEntry;
 import com.example.notekeeper.NoteKeeperDatabaseContract.NoteInfoEntry;
@@ -98,12 +99,22 @@ public class NoteKeeperProvider extends ContentProvider {
     }
 
     private Cursor notesExpandedQuery(SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        String[] columns = new String[projection.length];
+        for(int idx = 0; idx < projection.length; idx++){
+
+                    columns[idx] = projection[idx].equals(BaseColumns._ID) ||
+                    projection[idx].equals(CoursesIdColumns.COLUMN_COURSE_ID)  ?
+                    NoteInfoEntry.getQname(projection[idx]) : projection[idx];
+        }
+
+
         String tablesWithJoin = NoteInfoEntry.TABLE_NAME +  " JOIN " +
                 CourseInfoEntry.TABLE_NAME + " ON " +
                 NoteInfoEntry.getQname(NoteInfoEntry.COLUMN_COURSE_ID) + " = " +
                 CourseInfoEntry.getQname(CourseInfoEntry.COLUMN_COURSE_ID);
 
-        return db.query(tablesWithJoin,projection,selection,selectionArgs,null ,
+        return db.query(tablesWithJoin,columns,selection,selectionArgs,null ,
                 null,sortOrder);
     }
 

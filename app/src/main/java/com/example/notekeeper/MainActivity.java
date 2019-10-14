@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     final String[] noteColumns = {
-                            NoteInfoEntry.getQname(NoteInfoEntry._ID),
+                            Notes._ID,
                             Notes.COLUMN_NOTE_TITLE,
                             Notes.COLUMN_COURSE_TITLE
                     };
