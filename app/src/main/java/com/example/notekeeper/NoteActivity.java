@@ -1,6 +1,7 @@
 package com.example.notekeeper;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -56,6 +57,7 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
     private SimpleCursorAdapter mAdapterCourses;
     private boolean mCoursesQueryFinished;
     private boolean mNotesQueryFinished;
+    private Uri mNoteUri;
 
     @Override
     protected void onDestroy() {
@@ -182,17 +184,7 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(Notes.COLUMN_NOTE_TITLE,"");
         values.put(Notes.COLUMN_NOTE_TEXT,"");
 
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-
-                Uri uri = getContentResolver().insert(Notes.CONTENT_URI,values);
-                return null;
-            }
-        };
-
-        task.execute();
-
+        mNoteUri = getContentResolver().insert(Notes.CONTENT_URI,values);
     }
 
     @Override
@@ -419,29 +411,17 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private CursorLoader createLoaderNotes() {
         mNotesQueryFinished = false;
-        return new CursorLoader(this){
-            @Override
-            public Cursor loadInBackground() {
 
-                SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
-
-                String courseId = "android_intents";
-                String titleStart = "dynamic";
-
-                String selection = NoteInfoEntry._ID + " = ?";
-                String[] selectionArgs = {Integer.toString(mNoteId)};
-
-                String[] noteColumns = {
-                        NoteInfoEntry.COLUMN_COURSE_ID,
-                        NoteInfoEntry.COLUMN_NOTE_TITLE,
-                        NoteInfoEntry.COLUMN_NOTE_TEXT
+        String[] noteColumns = {
+                Notes.COLUMN_COURSE_ID,
+                Notes.COLUMN_NOTE_TITLE,
+                Notes.COLUMN_NOTE_TEXT
                 };
 
-                return db.query(NoteInfoEntry.TABLE_NAME,noteColumns,selection,selectionArgs,
-                        null,null,null);
+        mNoteUri = ContentUris.withAppendedId(Notes.CONTENT_URI,mNoteId);
 
-            }
-        };
+        return new CursorLoader(this, mNoteUri,noteColumns,null,null,null);
+
     }
 
     @Override
