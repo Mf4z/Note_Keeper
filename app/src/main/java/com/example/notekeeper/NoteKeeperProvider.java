@@ -59,12 +59,12 @@ public class NoteKeeperProvider extends ContentProvider {
           case NOTES :
               rowId = db.insert(NoteInfoEntry.TABLE_NAME,null,values);
               //content://com.example.notekeeper.provider/notes/[noteid]
-              ContentUris.withAppendedId(Notes.CONTENT_URI,rowId);
+             rowUri = ContentUris.withAppendedId(Notes.CONTENT_URI,rowId);
               break;
 
           case COURSES :
               rowId = db.insert(CourseInfoEntry.TABLE_NAME,null,values);
-              ContentUris.withAppendedId(Courses.CONTENT_URI,rowId);
+              rowUri = ContentUris.withAppendedId(Courses.CONTENT_URI,rowId);
               break;
 
           case NOTES_EXPANDED :
@@ -73,7 +73,7 @@ public class NoteKeeperProvider extends ContentProvider {
       }
 
 
-      return null;
+      return rowUri;
 
     }
 

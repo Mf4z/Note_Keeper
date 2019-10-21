@@ -56,6 +56,7 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
     private SimpleCursorAdapter mAdapterCourses;
     private boolean mCoursesQueryFinished;
     private boolean mNotesQueryFinished;
+    private Uri mNoteUri;
 
     @Override
     protected void onDestroy() {
@@ -186,8 +187,8 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             protected Object doInBackground(Object[] objects) {
 
-           Uri uri = getContentResolver().insert(Notes.CONTENT_URI,values);
-           return null;
+                mNoteUri = getContentResolver().insert(Notes.CONTENT_URI,values);
+                return null;
             }
         };
 
