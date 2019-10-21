@@ -23,6 +23,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.example.notekeeper.NoteKeeperProviderContract.Courses;
+import com.example.notekeeper.NoteKeeperProviderContract.Notes;
 
 import static com.example.notekeeper.NoteKeeperDatabaseContract.*;
 
@@ -177,17 +178,16 @@ public class NoteActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void createNewNote() {
         final ContentValues values = new ContentValues();
-        values.put(NoteInfoEntry.COLUMN_COURSE_ID,"");
-        values.put(NoteInfoEntry.COLUMN_NOTE_TITLE,"");
-        values.put(NoteInfoEntry.COLUMN_NOTE_TEXT,"");
+        values.put(Notes.COLUMN_COURSE_ID,"");
+        values.put(Notes.COLUMN_NOTE_TITLE,"");
+        values.put(Notes.COLUMN_NOTE_TEXT,"");
 
         AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
 
-                SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
-                mNoteId = (int) db.insert(NoteInfoEntry.TABLE_NAME,null,values);
-                return null;
+           Uri uri = getContentResolver().insert(Notes.CONTENT_URI,values);
+           return null;
             }
         };
 

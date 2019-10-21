@@ -98,7 +98,7 @@ public class NoteKeeperProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor notesExpandedQuery(SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    private Cursor  notesExpandedQuery(SQLiteDatabase db, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         String[] columns = new String[projection.length];
         for(int idx = 0; idx < projection.length; idx++){
