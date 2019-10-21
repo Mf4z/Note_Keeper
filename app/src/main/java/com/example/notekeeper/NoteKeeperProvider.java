@@ -1,6 +1,7 @@
 package com.example.notekeeper;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -15,7 +16,7 @@ import static com.example.notekeeper.NoteKeeperProviderContract.*;
 
 public class NoteKeeperProvider extends ContentProvider {
 
-    private NoteKeeperOpenHelper mDbopenHelper;
+    private NoteKeeperOpenHelper mDbOpenHelper;
 
     private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,13 +50,36 @@ public class NoteKeeperProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+      SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+      long rowId = -1;
+      Uri rowUri = null;
+      int uriMatch = sUriMatcher.match(uri);
+      switch (uriMatch){
+
+          case NOTES :
+              rowId = db.insert(NoteInfoEntry.TABLE_NAME,null,values);
+              //content://com.example.notekeeper.provider/notes/[noteid]
+              ContentUris.withAppendedId(Notes.CONTENT_URI,rowId);
+              break;
+
+          case COURSES :
+              rowId = db.insert(CourseInfoEntry.TABLE_NAME,null,values);
+              ContentUris.withAppendedId(Courses.CONTENT_URI,rowId);
+              break;
+
+          case NOTES_EXPANDED :
+              //throw exception saying that this is read only table
+              break;
+      }
+
+
+      return null;
+
     }
 
     @Override
     public boolean onCreate() {
-        mDbopenHelper = new NoteKeeperOpenHelper(getContext());
+        mDbOpenHelper = new NoteKeeperOpenHelper(getContext());
         return true;
     }
 
@@ -63,7 +87,7 @@ public class NoteKeeperProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Cursor cursor = null;
-        SQLiteDatabase db = mDbopenHelper.getReadableDatabase();
+        SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
 
         int uriMatch = sUriMatcher.match(uri);
         switch (uriMatch){
